@@ -1,24 +1,19 @@
 <?php
-include 'index.php';
-require 'pdo.php';
+require 'libs/header.php';
+require 'libs/pdo.php';
+require 'libs/article.php';
 
-$articles = [];
-try {
-    $query = $db->query('SELECT titre, contenu, id FROM articles');
-    $articles = $query->fetchAll();
-} catch (Exception $e) {
-    echo '<script>console.warn("' . $e->getMessage() . '")</script>';
-}
+$articles = getAllArticles($db);
 ?>
 
 <h2>News</h2>
 <?php 
 if (count($articles) > 0) {
     foreach ($articles as $article) {
-        echo '<hr>';
+        echo '<div class="article-box">';
         echo '<a href="article.php?id=' . $article['id'] . '"><h3>' . $article['titre'] . '</h3></a>';
         echo '<p>' . $article['contenu'] . '</p>';
-        echo '<hr>';
+        echo '</div>';
     }
 } else {
     echo '<p>Aucun article</p>';

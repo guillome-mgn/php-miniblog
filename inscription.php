@@ -1,21 +1,11 @@
 <?php
-include 'index.php';
-require 'pdo.php';
+require 'libs/header.php';
+require 'libs/pdo.php';
+require 'libs/user.php';
 
-try {
-    if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
-        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
-        $query = $db->prepare('INSERT INTO users(username, email, password) VALUES(:username, :email, :password)');
-        $query->execute([
-            'username' => $_POST['username'],
-            'email' => $_POST['email'],
-            'password' => $hashedPassword
-        ]);
-        echo '<script>console.log("Inscription réussie")</script>';
-        header('Location: login.php');
-    }
-} catch (Exception $e) {
-    echo '<script>console.warn("' . $e->getMessage() . '")</script>';
+if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+    addUser($db, $_POST['username'], $_POST['email'], $_POST['password']);
+    header('Location: login.php');
 }
 ?>
 

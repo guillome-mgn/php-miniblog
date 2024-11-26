@@ -1,26 +1,12 @@
 <?php
-include 'index.php';
-require 'pdo.php';
+require 'libs/header.php';
+require 'libs/pdo.php';
+require 'libs/user.php';
 
-try {
-    if (isset($_POST['email']) && isset($_POST['password']) && !isset($_SESSION['user'])) {
-        $query = $db->prepare('SELECT * FROM users WHERE email = :email');
-        $query->execute([
-            'email' => $_POST['email'],
-        ]);
-        $user = $query->fetch();
-        if ($user && password_verify($_POST['password'], $user['password'])) {
-            echo '<script>console.log("Connexion réussie")</script>';
-            $_SESSION['user'] = $user;
-            header('Location: news.php');
-        } else {
-            echo '<script>console.warn("Identifiants incorrects")</script>';
-        }
-    } else {
-        echo '<script>console.warn("Connexion impossible ou tous les champs ne sont pas renseignés")</script>';
-    }
-} catch (Exception $e) {
-    echo '<script>console.warn("' . $e->getMessage() . '")</script>';
+if (isset($_POST['email']) && isset($_POST['password']) && !isset($_SESSION['user'])) {
+    login($db, $_POST['email'], $_POST['password']);
+} else {
+    echo '<script>console.warn("Connexion impossible ou tous les champs ne sont pas renseignés")</script>';
 }
 ?>
 

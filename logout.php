@@ -1,15 +1,9 @@
 <?php
-include 'index.php';
+require 'libs/header.php';
+require 'libs/user.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_SESSION['user'])) {
-        session_unset();
-        session_destroy();
-        echo '<script>console.log("Déconnexion réussie")</script>';
-        header('Location: login.php');
-    } else {
-        echo '<script>console.warn("Déconnexion impossible")</script>';
-    }
+    logout();
 }
 ?>
 
